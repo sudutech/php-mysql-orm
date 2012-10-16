@@ -32,6 +32,7 @@ $arr=$user->select('name,email')->find();
 foreach ($arr as $var) {
 	echo $var['name'];
 }
+```
 
 install
 =======
@@ -50,4 +51,4 @@ define('QUERY_ERROR',true);//if echo query error.
 /************************************************************************************/
 ```
 
-中文wiki:[wiki-zh](http://hit9.github.com/wiki/php-mysql-orm/index.html)
+**中文wiki:[wiki-zh](http://hit9.github.com/wiki/php-mysql-orm/index.html)**
