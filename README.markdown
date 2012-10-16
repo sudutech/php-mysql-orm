@@ -1,9 +1,8 @@
 php-mysql-orm
--------------
-
-code examples
 =============
 
+code examples
+-------------
 ```php
 include "db.class.php";
 
@@ -35,7 +34,7 @@ foreach ($arr as $var) {
 ```
 
 install
-=======
+-------
 
 include it in your php script.
 setting:
@@ -51,4 +50,6 @@ define('QUERY_ERROR',true);//if echo query error.
 /************************************************************************************/
 ```
 
+wiki
+----
 **中文wiki:[wiki-zh](http://hit9.github.com/wiki/php-mysql-orm/index.html)**
