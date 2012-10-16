@@ -37,9 +37,11 @@ install
 -------
 
 include it in your php script.
+
 setting:
+
 ```php
- /************************************* settingts ******************************************/
+/************************************* settingts ******************************************/
 define('DB_HOST','localhost');
 define('DB_NAME','dbname');
 define('DB_USER','root');
