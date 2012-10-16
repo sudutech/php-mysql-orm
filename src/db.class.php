@@ -79,7 +79,7 @@ class db
 			$arr_str=array();
 			foreach ($arg as $key=>$var) {
 				$var=$this->check_input($var);
-				$arr_str[]="`".$key."`='".$var."'";
+				$arr_str[]=$key."='".$var."'";
 			}
 			$str_temp=implode(' AND ',$arr_str);
 		}elseif(is_string($arg))
@@ -127,7 +127,7 @@ class db
 		foreach($cond as $key => $value) {
 			//安全,转义字符串,防注入
 			$value = $this->check_input($value);
-			$fields[] = "`$key`='$value'";
+			$fields[] = "$key='$value'";
 		}
 		return implode(', ', $fields);
 	}
@@ -154,14 +154,14 @@ class db
 		$this->data=array();
 	}
 	//查询数据库,返回查询句柄
-	private function query($sql='')	
+	public function query($sql='')
 	{
 		if($sql=='')
 		{
 			$this->debug_error('SQL is empty');
 		}else{
 			$re=mysql_query($sql);
-			if(!$re) $this->debug_error('Query Error :'.mysql_error().'<br>Your SQL is : '.$sql);
+			if(!$re) $this->debug_error('Query Error :'.mysql_error().' Your SQL is : '.$sql);
 		}
 		return $re;
 	}
@@ -174,11 +174,11 @@ class db
 		{
 			if(!empty($this->options))//如果前面有连贯操作
 			{
-				$sql="SELECT {$this->primary_key} FROM `{$this->table}`";
+				$sql="SELECT {$this->primary_key} FROM {$this->table}";
 				$sql=$this->parseoptions($sql);// 解析查询条件构造sql
 				$this->empty_options();//连贯操作的终点需要清空连贯操作的数组options
 			}else{
-				$sql="SELECT {$this->primary_key} FROM `{$this->table}`";
+				$sql="SELECT {$this->primary_key} FROM {$this->table}";
 			}	
 		}
 		return mysql_num_rows($this->query($sql));
@@ -188,7 +188,7 @@ class db
 	{
 		$this->data=array_merge($this->data,$arr);
 		$fields = $this->implodefields($this->data);
-		$sql = "INSERT INTO `{$this->table}` SET $fields";
+		$sql = "INSERT INTO {$this->table} SET $fields";
 		$this->data_clean();//data数组清空
 		return $this->query($sql);
 	}
@@ -202,18 +202,18 @@ class db
 		if(!empty($id))
 		{
 			$id=$this->check_input($id);
-			$sql="SELECT ".$fields." FROM `{$this->table}` WHERE `{$this->primary_key}`='$id' LIMIT 1";
+			$sql="SELECT ".$fields." FROM {$this->table} WHERE {$this->primary_key}='$id' LIMIT 1";
 			$obj=mysql_fetch_object($this->query($sql));
 			return $obj;
 		}else{
 			if(!empty($this->options))//如果前面有连贯操作
 			{
-				$sql="SELECT ".$fields." FROM `{$this->table}`";
+				$sql="SELECT ".$fields." FROM {$this->table}";
 				$sql=$this->parseoptions($sql);// 解析查询条件构造sql
 				$this->empty_options();//连贯操作的终点需要清空连贯操作的数组options
 			}else{
 				//否则视作查询全部记录
-				$sql="SELECT ".$fields." FROM `{$this->table}`";
+				$sql="SELECT ".$fields." FROM {$this->table}";
 			}
 			$return_arr=array();
 			$re=$this->query($sql);
@@ -231,10 +231,10 @@ class db
 		if(!empty($id))
 		{
 			$id=$this->check_input($id);
-			$sql="DELETE FROM `{$this->table}` WHERE `{$this->primary_key}`='$id'";
+			$sql="DELETE FROM {$this->table} WHERE {$this->primary_key}='$id'";
 			return $this->query($sql);
 		}else{
-			$sql="DELETE FROM `{$this->table}`";
+			$sql="DELETE FROM {$this->table}";
 			if(empty($this->options)) $this->debug_error('No Query Conditions for delete()');
 			$sql=$this->parseoptions($sql);// 解析查询条件构造sql
 			$this->empty_options();
@@ -244,7 +244,7 @@ class db
 	//清空表
 	public function empty_table()
 	{
-		$sql="TRUNCATE TABLE `{$this->table}`";
+		$sql="TRUNCATE TABLE {$this->table}";
 		return $this->query($sql);
 	}
 	//update 部分
@@ -275,9 +275,9 @@ class db
 		if(isset($id))//如果使用主键更新方式
 		{
 			$id=$this->check_input($id);
-			$sql="UPDATE `{$this->table}` SET ".$fields." WHERE `{$this->primary_key}`='$id'";
+			$sql="UPDATE {$this->table} SET ".$fields." WHERE {$this->primary_key}='$id'";
 		}else{//使用条件更新
-			$sql="UPDATE `{$this->table}` SET ".$fields;
+			$sql="UPDATE {$this->table} SET ".$fields;
 			if(empty($this->options)) $this->debug_error('No Query Conditions for update()');
 			$sql=$this->parseoptions($sql);// 解析查询条件构造sql
 			$this->empty_options();
@@ -371,5 +371,12 @@ class db
 	private function debug_error($msg)
 	{
 		if($this->query_error) echo $msg;//debug下,显示错误
+	}
+
+	//table() 改变当前的表
+	public function table($tbl_name)
+	{
+		$this->table=$tbl_name;
+		return $this;
 	}
 }
