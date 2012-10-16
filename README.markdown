@@ -33,13 +33,6 @@ foreach ($arr as $var) {
 	echo $var['name'];
 }
 
-/******* for more : http://archphp.sinaapp.com/add.html *****/
-```
-
-wiki
-====
-http://archphp.sinaapp.com/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C%E7%B1%BB.html
-
 install
 =======
 
@@ -56,3 +49,5 @@ define('DB_CHAR_SET','utf8');
 define('QUERY_ERROR',true);//if echo query error.
 /************************************************************************************/
 ```
+
+中文wiki:[wiki-zh](http://hit9.github.com/wiki/php-mysql-orm/index.html)
