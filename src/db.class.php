@@ -2,12 +2,12 @@
 /**********************************************************************************
  * Author:hit9
  * github:@hit9
+ * url:http://hit9.github.com/wiki/php-mysql-orm
  * Permission to use it for any purpose
  * Db类,负责数据库连接和基本的CURD,实现了连贯操作和事务处理
  * 配置项:DB_HOST,DB_CHAR_SET,DB_NAME,DB_USER,DB_PASSWD,TABLE_PREFIX,QUERY_ERROR
  * 每次实例化单利连接数据库
  * 实例化的参数:$classname(数据库表的名字(不带前缀)),$primary_key(表主键)
- * 用法详解:http://archphp.sinaapp.com/数据库操作类.html
  *
  ************************************************************************************/
 

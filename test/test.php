@@ -6,12 +6,10 @@ $user=new db('user');
 
 /*要么这两条数据全部写入,要不全不写入*/
 $user->begin();//开启一个事务
-$user->name='小胖';
-$user->email='xiaopang@gmail.com';
+$user->name='小飞';
+$user->email='xiaofei@gmail.com';
 $re1=$user->add();
-$user->name='小惠';
-$user->id=2;//假如id=2已经有记录了,构造一个冲突
-$re2=$user->add();//构造一个不可能完成的事件做回滚测试
+$re2=$user->find(100);//构造一个不可能完成的事件做回滚测试
 if($re1 && $re2)
 {
 	$user->commit();// 如果均顺利执行,commit
