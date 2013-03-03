@@ -23,7 +23,7 @@ define('QUERY_ERROR',true);//是否调试模式,调试模式下会显示查询�
 
 class db
 {
-	private static $conn;//数据库连接
+	private static $conn;//
 	private $table;//数据库表名字
 	private $tablepre;//表前缀
 	private $data;//暂时存放写入的数据的数组
@@ -114,9 +114,8 @@ class db
 	{
 		if(!self::$conn)
 		{
-			self::$conn=mysql_connect(DB_HOST,DB_USER,DB_PASSWD);
-			mysql_query('set names '.DB_CHAR_SET);
-			mysql_select_db(DB_NAME);
+			self::$conn= new mysqli(DB_HOST,DB_USER,DB_PASSWD,DB_NAME);
+			mysqli_query(self::$conn, 'set names '.DB_CHAR_SET);
 		}
 		return self::$conn;
 	}
@@ -160,8 +159,8 @@ class db
 		{
 			$this->debug_error('SQL is empty');
 		}else{
-			$re=mysql_query($sql);
-			if(!$re) $this->debug_error('Query Error :'.mysql_error().' Your SQL is : '.$sql);
+			$re=mysqli_query(self::$conn,$sql);
+			if(!$re) $this->debug_error('Query Error :'.mysqli_error().' Your SQL is : '.$sql);
 		}
 		return $re;
 	}
@@ -181,7 +180,7 @@ class db
 				$sql="SELECT {$this->primary_key} FROM {$this->table}";
 			}	
 		}
-		return mysql_num_rows($this->query($sql));
+		return mysqli_stmt_num_rows($this->query($sql));
 	}
 	//插入操作,在表上增加一个记录,返回执行结果true or false
 	public function add($arr=array())
@@ -203,7 +202,7 @@ class db
 		{
 			$id=$this->check_input($id);
 			$sql="SELECT ".$fields." FROM {$this->table} WHERE {$this->primary_key}='$id' LIMIT 1";
-			$obj=mysql_fetch_object($this->query($sql));
+			$obj=mysqli_fetch_object($this->query($sql));
 			return $obj;
 		}else{
 			if(!empty($this->options))//如果前面有连贯操作
@@ -217,7 +216,7 @@ class db
 			}
 			$return_arr=array();
 			$re=$this->query($sql);
-			while($re_arr=mysql_fetch_array($re))
+			while($re_arr=mysqli_fetch_array($re))
 			{
 				$return_arr[]=$re_arr;
 			}
@@ -297,13 +296,13 @@ class db
 			{
 				return false;
 			}
-			else if (0 == mysql_num_rows($result))
+			else if (0 == mysqli_num_rows($result))
 			{
 				return false;
 			}
 			else
 			{
-				while($result_array = mysql_fetch_array($result))
+				while($result_array = mysqli_fetch_array($result))
 				{
 					array_push($calback_arrary, $result_array);
 				}
